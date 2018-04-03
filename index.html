@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>D3 Tutorial 2 </title>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+  </head>
+  <body>
+	
+
+	
+	<script>
+
+
+    	var canvas = d3.select("body").append("svg")
+						.attr("width", 500)
+						.attr("height", 500);
+	var x = 17;
+	console.log(x)
+<!--    var y = d3.csv("T.csv");
+<!--	d3.csv("Test1.csv", function(data) { console.log(data);})
+	d3.csv("Test1.csv", function (data){
+	
+	var x2 = 16;
+	console.log(x2);
+	console.log(data);
+	console.log(data.Value)
+	
+
+
+	var circle2 = canvas.append("circle")
+							.attr("cx", data.Value*10)
+							.attr("cy", 100)
+							.attr("r", 70);
+	
+	var text = canvas.append("text")
+					.attr("fill","white")
+					.attr("x", data.Value*10)
+					.attr("y",100)
+					.text(data.Name);
+
+	
+	
+	 })
+
+		
+		
+	</script>
+  
+  </body>
+</html>
