@@ -1,31 +1,31 @@
-Stadium,Capacity,City,State,Year.opened,Type,Tenant,Link,Cost1,Cost1_inflation,Ref
-Air Canada Centre,19800,Toronto,Ontario,1999,Basketball,Toronto Raptors,https://en.wikipedia.org/wiki/Air_Canada_Centre,265,370,[1]Guessed
-American Airlines Arena,19600,Miami,Florida,1999,Basketball,Miami Heat,https://en.wikipedia.org/wiki/American_Airlines_Arena,213,313,
-American Airlines Center,19200,Dallas,Texas,2001,Basketball,Dallas Mavericks,https://en.wikipedia.org/wiki/American_Airlines_Center,420,580,
-Amway Center,18846,Orlando,Florida,2010,Basketball,Orlando Magic,https://en.wikipedia.org/wiki/Amway_Center,480,546,
-AT&T Center,18418,San Antonio,Texas,2002,Basketball,San Antonio Spurs,https://en.wikipedia.org/wiki/AT%26T_Center,186,253,
-Bankers Life Fieldhouse,17923,Indianapolis,Indiana,1999,Basketball,Indiana Pacers,https://en.wikipedia.org/wiki/Bankers_Life_Fieldhouse,183,269,
-Barclays Center,17732,Brooklyn,New York,2012,Basketball,Brooklyn Nets,https://en.wikipedia.org/wiki/Barclays_Center,1000,1000,[2]
-Capital One Arena,20356,Washington,D.C.,1997,Basketball,Washington Wizards,https://en.wikipedia.org/wiki/Capital_One_Arena,260,396,
-Chesapeake Energy Arena,18203,Oklahoma City,Oklahoma,2002,Basketball,Oklahoma City Thunder,https://en.wikipedia.org/wiki/Chesapeake_Energy_Arena,89.2,140,Guessed
-FedExForum,18119,Memphis,Tennessee,2004,Basketball,Memphis Grizzlies,https://en.wikipedia.org/wiki/FedExForum,250,324,
-Golden 1 Center,17608,Sacramento,California,2016,Basketball,Sacramento Kings,https://en.wikipedia.org/wiki/Golden_1_Center,558.2,558.2,
-Little Caesars Arena,20491,Detroit,Michigan,2017,Basketball,Detroit Pistons,https://en.wikipedia.org/wiki/Little_Caesars_Arena,862.9,862.9,
-Madison Square Garden,19812,New York,New York,1968,Basketball,New York Knicks,https://en.wikipedia.org/wiki/Madison_Square_Garden,123,840,
-Moda Center,19980,Portland,Oregon,1995,Basketball,Portland Trail Blazers,https://en.wikipedia.org/wiki/Moda_Center,262,421,
-Oracle Arena,19596,Oakland,California,1966,Basketball,Golden State Warriors,https://en.wikipedia.org/wiki/Oracle_Arena,24,145,Guessed
-Pepsi Center,19155,Denver,Colorado,1999,Basketball,Denver Nuggets,https://en.wikipedia.org/wiki/Pepsi_Center,187,275,
-Philips Arena,18118,Atlanta,Georgia,1999,Basketball,Atlanta Hawks,https://en.wikipedia.org/wiki/Philips_Arena,213,314,
-Quicken Loans Arena,20562,Cleveland,Ohio,1994,Basketball,Cleveland Cavaliers,https://en.wikipedia.org/wiki/Quicken_Loans_Arena,100,165,
-Smoothie King Center,16867,New Orleans,Louisiana,1999,Basketball,New Orleans Pelicans,https://en.wikipedia.org/wiki/Smoothie_King_Center,114,167,
-Spectrum Center,19077,Charlotte,North Carolina,2005,Basketball,Charlotte Hornets,https://en.wikipedia.org/wiki/Spectrum_Center_(arena),260,326,
-Staples Center,19060,Los Angeles,California,1999,Basketball,Los Angeles Clippers,https://en.wikipedia.org/wiki/Staples_Center,375,551,
-Staples Center,18997,Los Angeles,California,1999,Basketball,Los Angeles Lakers,https://en.wikipedia.org/wiki/Staples_Center,375,551,
-Talking Stick Resort Arena,18422,Phoenix,Arizona,1992,Basketball,Phoenix Suns,https://en.wikipedia.org/wiki/Talking_Stick_Resort_Arena,89,155,
-Target Center,19356,Minneapolis,Minnesota,1990,Basketball,Minnesota Timberwolves,https://en.wikipedia.org/wiki/Target_Center,104,195,
-TD Garden,18624,Boston,Massachusetts,1995,Basketball,Boston Celtics,https://en.wikipedia.org/wiki/TD_Garden,160,257,
-Toyota Center,18055,Houston,Texas,2003,Basketball,Houston Rockets,https://en.wikipedia.org/wiki/Toyota_Center,235,313,
-United Center,20917,Chicago,Illinois,1994,Basketball,Chicago Bulls,https://en.wikipedia.org/wiki/United_Center,175,289,
-Vivint Smart Home Arena,18303,Salt Lake City,Utah,1991,Basketball,Utah Jazz,https://en.wikipedia.org/wiki/Vivint_Smart_Home_Arena,93,167,
-Wells Fargo Center,20328,Philadelphia,Pennsylvania,1996,Basketball,Philadelphia 76ers,https://en.wikipedia.org/wiki/Wells_Fargo_Center_(Philadelphia),210,328,
-Wisconsin Entertainment and Sports Center,17500,Milwaukee,Wisconsin,2018,Basketball,Milwaukee Bucks,https://en.wikipedia.org/wiki/Wisconsin_Entertainment_and_Sports_Center,524,534,
+Stadium,Capacity,City,State,Year.opened,Type,Tenant,Link,Cost1,Cost1_Inflation,2018CPI,Height Correct
+Wisconsin Entertainment and Sports Center,17500,Milwaukee,Wisconsin,2018,Basketball,Milwaukee Bucks,https://en.wikipedia.org/wiki/Wisconsin_Entertainment_and_Sports_Center,524,524.0,249.24,
+Little Caesars Arena,20491,Detroit,Michigan,2017,Basketball,Detroit Pistons,https://en.wikipedia.org/wiki/Little_Caesars_Arena,862.9,877.4,245.12,0
+Golden 1 Center,17608,Sacramento,California,2016,Basketball,Sacramento Kings,https://en.wikipedia.org/wiki/Golden_1_Center,558.2,579.7,240.007,0
+Barclays Center,17732,Brooklyn,New York,2012,Basketball,Brooklyn Nets,https://en.wikipedia.org/wiki/Barclays_Center,1000,1085.6,229.594,0
+Amway Center,18846,Orlando,Florida,2010,Basketball,Orlando Magic,https://en.wikipedia.org/wiki/Amway_Center,480,548.6,218.056,0
+Spectrum Center,19077,Charlotte,North Carolina,2005,Basketball,Charlotte Hornets,https://en.wikipedia.org/wiki/Spectrum_Center_(arena),260,331.8,195.3,0
+FedExForum,18119,Memphis,Tennessee,2004,Basketball,Memphis Grizzlies,https://en.wikipedia.org/wiki/FedExForum,250,329.9,188.9,0
+Toyota Center,18055,Houston,Texas,2003,Basketball,Houston Rockets,https://en.wikipedia.org/wiki/Toyota_Center,235,318.3,184,0
+AT&T Center,18418,San Antonio,Texas,2002,Basketball,San Antonio Spurs,https://en.wikipedia.org/wiki/AT%26T_Center,186,257.7,179.9,0
+Chesapeake Energy Arena,18203,Oklahoma City,Oklahoma,2002,Basketball,Oklahoma City Thunder,https://en.wikipedia.org/wiki/Chesapeake_Energy_Arena,89.2,123.6,179.9,1
+American Airlines Center,19200,Dallas,Texas,2001,Basketball,Dallas Mavericks,https://en.wikipedia.org/wiki/American_Airlines_Center,420,591.1,177.1,0
+Air Canada Centre,19800,Toronto,Ontario,1999,Basketball,Toronto Raptors,https://en.wikipedia.org/wiki/Air_Canada_Centre,265,289.3,166.6,0
+American Airlines Arena,19600,Miami,Florida,1999,Basketball,Miami Heat,https://en.wikipedia.org/wiki/American_Airlines_Arena,213,318.7,166.6,1
+Bankers Life Fieldhouse,17923,Indianapolis,Indiana,1999,Basketball,Indiana Pacers,https://en.wikipedia.org/wiki/Bankers_Life_Fieldhouse,183,273.8,166.6,2
+Pepsi Center,19155,Denver,Colorado,1999,Basketball,Denver Nuggets,https://en.wikipedia.org/wiki/Pepsi_Center,187,279.8,166.6,3
+Philips Arena,18118,Atlanta,Georgia,1999,Basketball,Atlanta Hawks,https://en.wikipedia.org/wiki/Philips_Arena,213,318.7,166.6,4
+Smoothie King Center,16867,New Orleans,Louisiana,1999,Basketball,New Orleans Pelicans,https://en.wikipedia.org/wiki/Smoothie_King_Center,114,170.5,166.6,5
+Staples Center,19060,Los Angeles,California,1999,Basketball,Los Angeles Clippers,https://en.wikipedia.org/wiki/Staples_Center,375,561.0,166.6,6
+Staples Center,18997,Los Angeles,California,1999,Basketball,Los Angeles Lakers,https://en.wikipedia.org/wiki/Staples_Center,375,561.0,166.6,7
+Capital One Arena,20356,Washington,D.C.,1997,Basketball,Washington Wizards,https://en.wikipedia.org/wiki/Capital_One_Arena,260,403.8,160.5,0
+Wells Fargo Center,20328,Philadelphia,Pennsylvania,1996,Basketball,Philadelphia 76ers,https://en.wikipedia.org/wiki/Wells_Fargo_Center_(Philadelphia),210,333.6,156.9,0
+Moda Center,19980,Portland,Oregon,1995,Basketball,Portland Trail Blazers,https://en.wikipedia.org/wiki/Moda_Center,262,428.5,152.4,0
+TD Garden,18624,Boston,Massachusetts,1995,Basketball,Boston Celtics,https://en.wikipedia.org/wiki/TD_Garden,160,261.7,152.4,1
+Quicken Loans Arena,20562,Cleveland,Ohio,1994,Basketball,Cleveland Cavaliers,https://en.wikipedia.org/wiki/Quicken_Loans_Arena,100,168.2,148.2,0
+United Center,20917,Chicago,Illinois,1994,Basketball,Chicago Bulls,https://en.wikipedia.org/wiki/United_Center,175,294.3,148.2,1
+Talking Stick Resort Arena,18422,Phoenix,Arizona,1992,Basketball,Phoenix Suns,https://en.wikipedia.org/wiki/Talking_Stick_Resort_Arena,89,158.1,140.3,0
+Vivint Smart Home Arena,18303,Salt Lake City,Utah,1991,Basketball,Utah Jazz,https://en.wikipedia.org/wiki/Vivint_Smart_Home_Arena,93,170.2,136.2,0
+Target Center,19356,Minneapolis,Minnesota,1990,Basketball,Minnesota Timberwolves,https://en.wikipedia.org/wiki/Target_Center,104,198.3,130.7,0
+Madison Square Garden,19812,New York,New York,1968,Basketball,New York Knicks,https://en.wikipedia.org/wiki/Madison_Square_Garden,123,880.9,34.8,0
+Oracle Arena,19596,Oakland,California,1966,Basketball,Golden State Warriors,https://en.wikipedia.org/wiki/Oracle_Arena,24,184.6,32.4,0
