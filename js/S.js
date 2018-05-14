@@ -10,15 +10,18 @@ var canvas = d3.select(".SCATTER").append("svg")
 				.attr("height", height + margin.top + margin.bottom);
 
 // Pixel max and min for range				
-var Rmin = 50;
+var Rmin = 30;
 var Rmax = 700;
+// where Tline goes
+var YTline = 90;
+
 				
 //load data set in d3.csv				
 d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_Set2_NBA.csv").then(function(data){
 	
 	var CapMax = d3.max(data, function(d) {return parseFloat(d.Capacity);});
 	var CapMin = d3.min(data, function(d) {return parseFloat(d.Capacity);});
-	var YeaMax = d3.max(data, function(d) {return parseFloat(d['Year.opened']);});
+	var YeaMax = d3.max(data, function(d) {return parseFloat(d['Year.opened'])+2;});
 	var YeaMin = d3.min(data, function(d) {return parseFloat(d['Year.opened']);});
 	var CosMax = d3.max(data, function(d) {return parseFloat(d.Cost1_Inflation);});
 	var CosMin = d3.min(data, function(d) {return parseFloat(d.Cost1_Inflation);});
@@ -39,13 +42,17 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 		.x(function(d) {return d.x;})
 		.y(function(d) {return d.y;});
 	// Time Line Path
-	var tline = [{"x": Rmin, "y": 60}, 
-				 {"x": Rmax, "y": 60},
-				 {"x": Rmax, "y": 65},
-				 {"x": Rmax+10, "y": 60},
-				 {"x": Rmax, "y": 55},
-				 {"x": Rmax, "y": 60}
+	var tline = [{"x": Rmin, "y": YTline}, 
+				 {"x": Rmax, "y": YTline},
+				 {"x": Rmax, "y": YTline+5},
+				 {"x": Rmax+10, "y": YTline},
+				 {"x": Rmax, "y": YTline-5},
+				 {"x": Rmax, "y": YTline}
 				 ];
+	// bind data
+	var circle = canvas.selectAll("circle")
+		.data(data);
+		
 	// Create Time Line
 	canvas.append("path")
 		.attr("d", line(tline))
@@ -53,23 +60,19 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 		.attr("stroke", d3.rgb(80,80,80))
 		.attr("id", "Tline");
 	
-	canvas.selectAll("circle")
-		.data(data)
-		.enter()
-		.append("circle")
+	circle.enter().append("circle")
 		.attr("cx", function(d) {return scaleX(parseFloat(d['Year.opened']));})
-		.attr("cy", function(d) {return 60-parseInt(d['Height Correct'])*10})
-		.attr("id", function(d) {return d.Stadium+"T";})
-		.attr("r", 7);
+		.attr("cy", function(d) {return YTline-parseInt(d['Height Correct'])*10})
+		.attr("id", function(d) {return d.Stadium+"TT";})
+		.attr("r", 7)
+		.on("mouseover", handleMouseOver)
+		.on("mouseout", handleMouseOut);
 	
 	
 	//create scatter points using scale. year vs capacity	
-	canvas.selectAll("circle")
-		.data(data)
-		.enter()
-		.append("circle")
+	circle.enter().append("circle")
 		.attr("cx", function(d) {return scaleX(parseFloat(d['Year.opened']));})
-		.attr("cy", function(d) {return scaleY(parseFloat(d.Cost1_Inflation))+100;})
+		.attr("cy", function(d) {return scaleY(parseFloat(d.Cost1_Inflation))+YTline+5;})
 		.attr("r", function(d) {return scaleR(parseFloat(d.Capacity));})
 		.attr("id", function(d) {return d.Stadium;})
 		.on("mouseover", handleMouseOver)
@@ -92,8 +95,21 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/NBA_Co
 		
 
 function handleMouseOver(d) {
+		var ID = d3.select(this).attr("id")
+		if (ID.substr(ID.length-2,2)=="TT"){
+			var ID2 = ID.substr(0,ID.length-2);
+		} else {
+			var ID2 = ID + "TT";
+		}
+		console.log(ID);
+		console.log(ID2);
+		
 		var X = parseInt(d3.select(this).attr("cx"));
 		var Y = parseInt(d3.select(this).attr("cy"));
+		
+		d3.select("#"+ID).attr("fill", d3.rgb(244,161,66));
+		
+		d3.select("#" + ID2).attr("fill", d3.rgb(244,161,66));
 		
 		canvas.append("text")
 			.attr("x", X + 7)
