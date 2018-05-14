@@ -11,7 +11,7 @@ var canvas = d3.select(".SCATTER").append("svg")
 
 // Pixel max and min for range				
 var Rmin = 30;
-var Rmax = 700;
+var Rmax = 600;
 // where Tline goes
 var YTline = 90;
 //global variables for us in funcitons
@@ -67,6 +67,7 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 		.attr("cy", function(d) {return YTline-parseInt(d['Height Correct'])*10})
 		.attr("id", function(d) {return d.ID+"TT";})
 		.attr("r", 7)
+		.attr("fill", d3.rgb(93,161,216))
 		.on("mouseover", handleMouseOver)
 		.on("mouseout", handleMouseOut);
 	
@@ -77,15 +78,25 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 		.attr("cy", function(d) {return scaleY(parseFloat(d.Cost1_Inflation))+YTline+5;})
 		.attr("r", function(d) {return scaleR(parseFloat(d.Capacity));})
 		.attr("id", function(d) {return d.ID;})
+		.attr("fill", d3.rgb(93,161,216))
 		.on("mouseover", handleMouseOver)
 		.on("mouseout", handleMouseOut)
 		
+	//build axis
+	var Xaxis = d3.axisBottom(scaleX).tickFormat(d3.format("d"));
+	var Yaxis = d3.axisLeft(scaleY);
+	
+	canvas.append("a")
+		.attr("class", "axis")
+		.attr("transform", "translate(0,"+ (Rmax + YTline + 5) + ")")
+		.call(Xaxis);
+	
+	canvas.append("a")
+		.attr("class", "axis")
+		.attr("transform", "translate(" + (Rmin) +"," + (YTline + 5) + ")")
+		.call(Yaxis);
 	
 	
-	
-	console.log(CapMax);
-	console.log(YeaMin);
-
 });
 
 // create histogram from file
@@ -129,6 +140,6 @@ function handleMouseOver(d) {
 function handleMouseOut(d) {
 	d3.select("#TXT0").remove();
 	d3.select("#TXT1").remove();
-	d3.select("#"+ID).attr("fill", "black");
-	d3.select("#"+ID2).attr("fill", "black");
+	d3.select("#"+ID).attr("fill", d3.rgb(93,161,216));
+	d3.select("#"+ID2).attr("fill", d3.rgb(93,161,216));
 }					
