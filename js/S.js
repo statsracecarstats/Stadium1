@@ -14,7 +14,9 @@ var Rmin = 30;
 var Rmax = 700;
 // where Tline goes
 var YTline = 90;
-
+//global variables for us in funcitons
+var ID;
+var ID2;
 				
 //load data set in d3.csv				
 d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_Set2_NBA.csv").then(function(data){
@@ -63,7 +65,7 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 	circle.enter().append("circle")
 		.attr("cx", function(d) {return scaleX(parseFloat(d['Year.opened']));})
 		.attr("cy", function(d) {return YTline-parseInt(d['Height Correct'])*10})
-		.attr("id", function(d) {return d.Stadium+"TT";})
+		.attr("id", function(d) {return d.ID+"TT";})
 		.attr("r", 7)
 		.on("mouseover", handleMouseOver)
 		.on("mouseout", handleMouseOut);
@@ -74,7 +76,7 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 		.attr("cx", function(d) {return scaleX(parseFloat(d['Year.opened']));})
 		.attr("cy", function(d) {return scaleY(parseFloat(d.Cost1_Inflation))+YTline+5;})
 		.attr("r", function(d) {return scaleR(parseFloat(d.Capacity));})
-		.attr("id", function(d) {return d.Stadium;})
+		.attr("id", function(d) {return d.ID;})
 		.on("mouseover", handleMouseOver)
 		.on("mouseout", handleMouseOut)
 		
@@ -95,11 +97,11 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/NBA_Co
 		
 
 function handleMouseOver(d) {
-		var ID = d3.select(this).attr("id")
+		ID = d3.select(this).attr("id")
 		if (ID.substr(ID.length-2,2)=="TT"){
-			var ID2 = ID.substr(0,ID.length-2);
+			ID2 = ID.substr(0,ID.length-2);
 		} else {
-			var ID2 = ID + "TT";
+			ID2 = ID + "TT";
 		}
 		console.log(ID);
 		console.log(ID2);
@@ -127,4 +129,6 @@ function handleMouseOver(d) {
 function handleMouseOut(d) {
 	d3.select("#TXT0").remove();
 	d3.select("#TXT1").remove();
+	d3.select("#"+ID).attr("fill", "black");
+	d3.select("#"+ID2).attr("fill", "black");
 }					
