@@ -33,8 +33,9 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 		.range([Rmin,Rmax]);
 	//set scale for y-axis based on cost
 	var scaleY = d3.scaleLinear()
-		.domain([CosMin,CosMax])
+		.domain([0,Math.round(CosMax/100)*100])
 		.range([Rmax, Rmin]);
+	console.log(scaleY(0) - scaleY(100));
 	// set scale for radius based on capacity
 	var scaleR = d3.scaleLinear()
 		.domain([CapMin,CapMax])
@@ -102,6 +103,33 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 // create histogram from file
 d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/NBA_Cost_Hist.csv").then(function(hist){
 	
+	var CountMax = d3.max(hist, function(d) {return parseFloat(d.Count);});
+	var CountMin = d3.min(hist, function(d) {return parseFloat(d.Count);});
+	var BinMax = d3.max(hist, function(d) {return parseFloat(d.Bin);});
+	var BinMin = d3.min(hist, function(d) {return parseFloat(d.Bin);});
+	// set scale for histogram, x is the freq access
+	var scaleHX = d3.scaleLinear()
+		.domain([CountMin,CountMax])
+		.range([Rmin,Rmax-300]);
+	//set scale for y-axis based on bin
+	var scaleHY = d3.scaleLinear()
+		.domain([BinMin,BinMax])
+		.range([Rmax - (Rmax-Rmin)/(BinMax + 1), Rmin]);
+	console.log(scaleHY(0) - scaleHY(1));
+	canvas.selectAll("rect")
+		.data(hist)
+		.enter()
+		.append("rect")
+		.attr("x", Rmax +10)
+		.attr("y", function(d) {return scaleHY(d.Bin) + YTline + 5})
+		.attr("height", scaleHY(0)-scaleHY(1))
+		.attr("width", function(d) {return scaleHX(d.Count) - Rmin})
+		.attr("fill", d3.rgb(93,161,216))
+		.attr("id", function(d) {return "H" + d.Bin})
+		.attr("stroke-width", 0.75)
+		.attr("stroke", d3.rgb(80,80,80))
+		.on("mouseover", histMouseOver);
+		
 	
 });
 
@@ -124,6 +152,19 @@ function handleMouseOver(d) {
 		
 		d3.select("#" + ID2).attr("fill", d3.rgb(244,161,66));
 		
+		d3.select("#H" + d['Hist Bin']).attr("fill",d3.rgb(244,161,66));
+		
+		canvas.append("rect")
+			.attr("x", Rmin)
+			.attr("y", d3.select("#H" + d['Hist Bin']).attr("y"))
+			.attr("width", Rmax-Rmin)
+			.attr("height", d3.select("#H" + d['Hist Bin']).attr("height"))
+			.attr("fill", "none")
+			.attr("stroke", d3.rgb(80,80,80))
+			.attr("stroke-width", 0.75)
+			.attr("id", "sightline")
+			.style("stroke-dasharray", "4,4");
+		
 		canvas.append("text")
 			.attr("x", X + 7)
 			.attr("y", Y - 7)
@@ -140,6 +181,14 @@ function handleMouseOver(d) {
 function handleMouseOut(d) {
 	d3.select("#TXT0").remove();
 	d3.select("#TXT1").remove();
+	d3.select("#sightline").remove();
 	d3.select("#"+ID).attr("fill", d3.rgb(93,161,216));
 	d3.select("#"+ID2).attr("fill", d3.rgb(93,161,216));
+	d3.select("#H" + d['Hist Bin']).attr("fill",d3.rgb(93,161,216));
+}
+
+function histMouseOver(d) {
+	canvas.selectAll("circle").each(function(d) {
+			console.log(d3.select(this).attr("cy"));
+	});
 }					
