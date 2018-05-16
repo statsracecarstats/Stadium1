@@ -1,8 +1,7 @@
-
 // set up basic SVG canvase use internet preffered margin set up (i follow the pack)
 var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 900 - margin.left - margin.right,
-    height = 2200 - margin.top - margin.bottom;
+    width = 1000 - margin.left - margin.right,
+    height = 800 - margin.top - margin.bottom;
 
 	
 var canvas = d3.select(".SCATTER").append("svg")
@@ -10,13 +9,17 @@ var canvas = d3.select(".SCATTER").append("svg")
 				.attr("height", height + margin.top + margin.bottom);
 
 // Pixel max and min for range				
-var Rmin = 30;
-var Rmax = 600;
-// where Tline goes
-var YTline = 90;
+var Rmin = 50;
+var Rmax = 620;
+// Y offset - artifact of old design
+var YTline = 30;
+// where hist goes
+var histOffset = 30;
 //global variables for us in funcitons
 var ID;
 var ID2;
+var ymin;
+var ymax;
 				
 //load data set in d3.csv				
 d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_Set2_NBA.csv").then(function(data){
@@ -24,7 +27,7 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 	var CapMax = d3.max(data, function(d) {return parseFloat(d.Capacity);});
 	var CapMin = d3.min(data, function(d) {return parseFloat(d.Capacity);});
 	var YeaMax = d3.max(data, function(d) {return parseFloat(d['Year.opened'])+2;});
-	var YeaMin = d3.min(data, function(d) {return parseFloat(d['Year.opened']);});
+	var YeaMin = d3.min(data, function(d) {return parseFloat(d['Year.opened'])-2;});
 	var CosMax = d3.max(data, function(d) {return parseFloat(d.Cost1_Inflation);});
 	var CosMin = d3.min(data, function(d) {return parseFloat(d.Cost1_Inflation);});
 	//set scale for x-axis based on year
@@ -44,42 +47,19 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/Data_S
 	var line = d3.line()
 		.x(function(d) {return d.x;})
 		.y(function(d) {return d.y;});
-	// Time Line Path
-	var tline = [{"x": Rmin, "y": YTline}, 
-				 {"x": Rmax, "y": YTline},
-				 {"x": Rmax, "y": YTline+5},
-				 {"x": Rmax+10, "y": YTline},
-				 {"x": Rmax, "y": YTline-5},
-				 {"x": Rmax, "y": YTline}
-				 ];
-	// bind data
+	//create scatter points using scale. year vs capacity
 	var circle = canvas.selectAll("circle")
-		.data(data);
-		
-	// Create Time Line
-	canvas.append("path")
-		.attr("d", line(tline))
-		.attr("Stroke-width", 2.5)
-		.attr("stroke", d3.rgb(80,80,80))
-		.attr("id", "Tline");
-	
-	circle.enter().append("circle")
-		.attr("cx", function(d) {return scaleX(parseFloat(d['Year.opened']));})
-		.attr("cy", function(d) {return YTline-parseInt(d['Height Correct'])*10})
-		.attr("id", function(d) {return d.ID+"TT";})
-		.attr("r", 7)
-		.attr("fill", d3.rgb(93,161,216))
-		.on("mouseover", handleMouseOver)
-		.on("mouseout", handleMouseOut);
-	
-	
-	//create scatter points using scale. year vs capacity	
-	circle.enter().append("circle")
+		.data(data)
+		.enter()
+		.append("circle")
 		.attr("cx", function(d) {return scaleX(parseFloat(d['Year.opened']));})
 		.attr("cy", function(d) {return scaleY(parseFloat(d.Cost1_Inflation))+YTline+5;})
 		.attr("r", function(d) {return scaleR(parseFloat(d.Capacity));})
 		.attr("id", function(d) {return d.ID;})
 		.attr("fill", d3.rgb(93,161,216))
+		.attr("strok-width", 0.25)
+		.attr("stroke", d3.rgb(80,80,80))
+		.attr("fill-opacity", 0.60)
 		.on("mouseover", handleMouseOver)
 		.on("mouseout", handleMouseOut)
 		
@@ -116,11 +96,12 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/NBA_Co
 		.domain([BinMin,BinMax])
 		.range([Rmax - (Rmax-Rmin)/(BinMax + 1), Rmin]);
 	console.log(scaleHY(0) - scaleHY(1));
+	
 	canvas.selectAll("rect")
 		.data(hist)
 		.enter()
 		.append("rect")
-		.attr("x", Rmax +10)
+		.attr("x", Rmax + histOffset)
 		.attr("y", function(d) {return scaleHY(d.Bin) + YTline + 5})
 		.attr("height", scaleHY(0)-scaleHY(1))
 		.attr("width", function(d) {return scaleHX(d.Count) - Rmin})
@@ -128,8 +109,17 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/NBA_Co
 		.attr("id", function(d) {return "H" + d.Bin})
 		.attr("stroke-width", 0.75)
 		.attr("stroke", d3.rgb(80,80,80))
-		.on("mouseover", histMouseOver);
-		
+		.on("mouseover", histMouseOver)
+		.on("mouseout", histMouseOut);
+	
+	//build axis
+	var Xaxis = d3.axisBottom(scaleHX).ticks(3);
+	
+	canvas.append("a")
+		.attr("class", "axis")
+		.attr("transform", "translate("+ (Rmax - 50 + histOffset) + "," + (Rmax + YTline + 5) + ")")
+		.call(Xaxis);
+	
 	
 });
 
@@ -137,27 +127,20 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/NBA_Co
 
 function handleMouseOver(d) {
 		ID = d3.select(this).attr("id")
-		if (ID.substr(ID.length-2,2)=="TT"){
-			ID2 = ID.substr(0,ID.length-2);
-		} else {
-			ID2 = ID + "TT";
-		}
+
 		console.log(ID);
-		console.log(ID2);
 		
 		var X = parseInt(d3.select(this).attr("cx"));
 		var Y = parseInt(d3.select(this).attr("cy"));
 		
 		d3.select("#"+ID).attr("fill", d3.rgb(244,161,66));
 		
-		d3.select("#" + ID2).attr("fill", d3.rgb(244,161,66));
-		
 		d3.select("#H" + d['Hist Bin']).attr("fill",d3.rgb(244,161,66));
 		
 		canvas.append("rect")
 			.attr("x", Rmin)
 			.attr("y", d3.select("#H" + d['Hist Bin']).attr("y"))
-			.attr("width", Rmax-Rmin)
+			.attr("width", Rmax-Rmin + histOffset)
 			.attr("height", d3.select("#H" + d['Hist Bin']).attr("height"))
 			.attr("fill", "none")
 			.attr("stroke", d3.rgb(80,80,80))
@@ -176,19 +159,57 @@ function handleMouseOver(d) {
 			.attr("y", Y - 20)
 			.attr("id", "TXT1")
 			.text(d.Stadium);
-}
+};
 
 function handleMouseOut(d) {
 	d3.select("#TXT0").remove();
 	d3.select("#TXT1").remove();
 	d3.select("#sightline").remove();
 	d3.select("#"+ID).attr("fill", d3.rgb(93,161,216));
-	d3.select("#"+ID2).attr("fill", d3.rgb(93,161,216));
 	d3.select("#H" + d['Hist Bin']).attr("fill",d3.rgb(93,161,216));
-}
+};
 
-function histMouseOver(d) {
+function histMouseOver(h) {
+	// get the max and min y posistions of the rectangle being hovered over
+	ymin = parseInt(d3.select(this).attr("y"));
+	ymax = parseInt(d3.select(this).attr("height")) + ymin;
+	//Highlight all circles in region of rect
 	canvas.selectAll("circle").each(function(d) {
-			console.log(d3.select(this).attr("cy"));
+			var CY = d3.select(this).attr("cy");
+			
+			if (CY < ymax && CY >= ymin) {
+				d3.select(this).attr("fill", d3.rgb(244,161,66))
+			};
+
 	});
-}					
+	// highlight hist block
+	d3.select("#H" + h.Bin).attr("fill",d3.rgb(244,161,66));
+	
+	// dotted line rect over same height as hist block
+	canvas.append("rect")
+			.attr("x", Rmin)
+			.attr("y", d3.select("#H" + h.Bin).attr("y"))
+			.attr("width", Rmax-Rmin + histOffset)
+			.attr("height", d3.select("#H" + h.Bin).attr("height"))
+			.attr("fill", "none")
+			.attr("stroke", d3.rgb(80,80,80))
+			.attr("stroke-width", 0.75)
+			.attr("id", "sightline")
+			.style("stroke-dasharray", "4,4");
+			
+};
+
+function histMouseOut(h) {
+	// un-highlight circles
+	canvas.selectAll("circle").each(function(d) {
+			var CY = d3.select(this).attr("cy");
+			
+			if (CY < ymax && CY >= ymin) {
+				d3.select(this).attr("fill", d3.rgb(93,161,216))
+			};
+	});
+	// un-highlight hist block
+	d3.select("#H" + h.Bin).attr("fill", d3.rgb(93,161,216));
+	
+	d3.select("#sightline").remove();
+};				
