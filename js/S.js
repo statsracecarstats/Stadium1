@@ -126,85 +126,118 @@ d3.csv("https://raw.githubusercontent.com/pacunningham821/Stadium1/master/NBA_Co
 
 
 function handleMouseOver(d) {
-		ID = d3.select(this).attr("id")
-    var TBheight = 150;
-    // width of text bubble based on stadium name length
-    var TBwidth = d.Stadium.length*8 + 20;
-    // Font size
-    var Fsz = 18;
+    ID = d3.select(this).attr("id")
+    var bub = d3.select("#"+ID+"TxtBub");
 
-		var X = parseInt(d3.select(this).attr("cx"));
-		var Y = parseInt(d3.select(this).attr("cy"));
+    d3.select("#"+ID).attr("fill", d3.rgb(244,161,66));
 
-		d3.select("#"+ID).attr("fill", d3.rgb(244,161,66));
+    d3.select("#H" + d['Hist Bin']).attr("fill",d3.rgb(244,161,66));
 
-		d3.select("#H" + d['Hist Bin']).attr("fill",d3.rgb(244,161,66));
+    // check if bubble already exists, if not then make a new bubble
+    if (bub.empty()) {
+      // put cost text into string
+      var costtxt = "2018 Cost: $" + parseFloat(d.Cost1_Inflation*1000000).toLocaleString('en');
+      var TBheight = 150;
+      // width of text bubble based on stadium name length or cost, which eveer
+      //is larger
+      if ((d.Stadium.length*8) >(costtxt.length*8.5)){
+        var TBwidth = d.Stadium.length*8+5;
+      } else {
+        var TBwidth = costtxt.length*8.5+5;
+      }
+      // Font size
+      var Fsz = 18;
+  		var X = parseInt(d3.select(this).attr("cx"));
+  		var Y = parseInt(d3.select(this).attr("cy"));
 
-    // create text bubble
-    canvas.append("rect")
-      .attr("x", X+7)
-      .attr("y", Y - TBheight)
-      .attr("width", TBwidth)
-      .attr("height", TBheight-2)
-      .attr("fill", d3.rgb(244,161,66))
-      .attr("stroke-width", 1)
-      .attr("stroke", d3.rgb(140,140,140))
-      .attr("rx", 15)
-      .attr("ry", 15)
-      .attr("id","TxtBub");
-    // Text for text bubble
-    // Stadium Name
-    canvas.append("text")
-      .attr("x", X + 9)
-      .attr("y", Y - TBheight + Fsz)
-      .attr("font-family", "Calibri")
-			.attr("font-size", Fsz + "px")
-			.attr("fill", d3.rgb(21,21,240))
-			.attr("font-weight", 700)
-      .attr("id", "TXT0")
-      .text(d.Stadium);
-    // Year Built
-    canvas.append("text")
-      .attr("x", X + 9)
-      .attr("y", Y - TBheight + (Fsz * 2.1))
-      .attr("font-family", "Calibri")
-      .attr("font-size", (Fsz-2) + "px")
-      .attr("fill", d3.rgb(21,21,240))
-      .attr("font-weight", 400)
-      .attr("id", "TXT1")
-      .text("Year Built: " + d['Year.opened']);
-    // 2018 cost to build
-    canvas.append("text")
-      .attr("x", X + 9)
-      .attr("y", Y - TBheight + (Fsz * 3.1))
-      .attr("font-family", "Calibri")
-      .attr("font-size", (Fsz-2) + "px")
-      .attr("fill", d3.rgb(21,21,240))
-      .attr("font-weight", 400)
-      .attr("id", "TXT2")
-      .text("2018 Cost: $" + parseFloat(d.Cost1_Inflation*1000000).toLocaleString('en'));
-    // Capacity
-    canvas.append("text")
-      .attr("x", X + 9)
-      .attr("y", Y - TBheight + (Fsz * 4.1))
-      .attr("font-family", "Calibri")
-      .attr("font-size", (Fsz-2) + "px")
-      .attr("fill", d3.rgb(21,21,240))
-      .attr("font-weight", 400)
-      .attr("id", "TXT3")
-      .text("Capacity: " + parseFloat(d.Capacity).toLocaleString('en'));
-    // wikipedia link
-    canvas.append("text")
-      .attr("x", X + 9)
-      .attr("y", Y - TBheight + (Fsz * 5.1))
-      .attr("font-family", "Calibri")
-      .attr("font-size", (Fsz-2) + "px")
-      .attr("fill", d3.rgb(21,21,240))
-      .attr("font-weight", 400)
-      .attr("id", "TXT3")
-      .attr("xlink:href", d.Link)
-      .text("Click for Wikipedia Page");
-
+      // create text bubble
+      canvas.append("rect")
+        .attr("x", X+7)
+        .attr("y", Y - TBheight)
+        .attr("width", TBwidth)
+        .attr("height", TBheight-2)
+        .attr("fill", d3.rgb(244,161,66))
+        .attr("stroke-width", 1)
+        .attr("stroke", d3.rgb(140,140,140))
+        .attr("rx", 15)
+        .attr("ry", 15)
+        .attr("id",ID + "TxtBub")
+        .call(d3.drag()
+          //Click and drag function below
+          .on("drag", function () {
+            d3.select("#"+ID+"TxtBub")
+              .attr("x", d3.event.x)
+              .attr("y", d3.event.y);
+            d3.select("#TXT0")
+              .attr("x", d3.event.x + 2)
+              .attr("y", d3.event.y + Fsz);
+            d3.select("#TXT1")
+              .attr("x", d3.event.x + 2)
+              .attr("y", d3.event.y + (Fsz * 2.1));
+            d3.select("#TXT2")
+              .attr("x", d3.event.x + 2)
+              .attr("y", d3.event.y + (Fsz * 3.1));
+            d3.select("#TXT3")
+              .attr("x", d3.event.x + 2)
+              .attr("y", d3.event.y + (Fsz * 4.1));
+            d3.select("#TXT4")
+              .attr("x", d3.event.x + 2)
+              .attr("y", d3.event.y + (Fsz * 5.1));
+          })
+        );
+      // Text for text bubble
+      // Stadium Name
+      canvas.append("text")
+        .attr("x", X + 9)
+        .attr("y", Y - TBheight + Fsz)
+        .attr("font-family", "Calibri")
+  			.attr("font-size", Fsz + "px")
+  			.attr("fill", d3.rgb(21,21,240))
+  			.attr("font-weight", 700)
+        .attr("id", ID+"TXT0")
+        .text(d.Stadium);
+      // Year Built
+      canvas.append("text")
+        .attr("x", X + 9)
+        .attr("y", Y - TBheight + (Fsz * 2.1))
+        .attr("font-family", "Calibri")
+        .attr("font-size", (Fsz-2) + "px")
+        .attr("fill", d3.rgb(21,21,240))
+        .attr("font-weight", 400)
+        .attr("id", ID+"TXT1")
+        .text("Year Built: " + d['Year.opened']);
+      // 2018 cost to build
+      canvas.append("text")
+        .attr("x", X + 9)
+        .attr("y", Y - TBheight + (Fsz * 3.1))
+        .attr("font-family", "Calibri")
+        .attr("font-size", (Fsz-2) + "px")
+        .attr("fill", d3.rgb(21,21,240))
+        .attr("font-weight", 400)
+        .attr("id", ID+"TXT2")
+        .text(costtxt);
+      // Capacity
+      canvas.append("text")
+        .attr("x", X + 9)
+        .attr("y", Y - TBheight + (Fsz * 4.1))
+        .attr("font-family", "Calibri")
+        .attr("font-size", (Fsz-2) + "px")
+        .attr("fill", d3.rgb(21,21,240))
+        .attr("font-weight", 400)
+        .attr("id", ID+"TXT3")
+        .text("Capacity: " + parseFloat(d.Capacity).toLocaleString('en'));
+      // wikipedia link
+      canvas.append("text")
+        .attr("x", X + 9)
+        .attr("y", Y - TBheight + (Fsz * 5.1))
+        .attr("font-family", "Calibri")
+        .attr("font-size", (Fsz-2) + "px")
+        .attr("fill", d3.rgb(21,21,240))
+        .attr("font-weight", 400)
+        .attr("id", ID+"TXT4")
+        .attr("xlink:href", d.Link)
+        .text("Click for Wikipedia Page");
+    }; // end if statement for text bub creation
 
     // outline box
 		canvas.append("rect")
@@ -222,11 +255,7 @@ function handleMouseOver(d) {
 };
 
 function handleMouseOut(d) {
-	d3.select("#TXT0").remove();
-	d3.select("#TXT1").remove();
-  d3.select("#TXT2").remove();
 	d3.select("#sightline").remove();
-  d3.select("#TxtBub").remove();
 	d3.select("#"+ID).attr("fill", d3.rgb(93,161,216));
 	d3.select("#H" + d['Hist Bin']).attr("fill",d3.rgb(93,161,216));
 };
