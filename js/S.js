@@ -1,7 +1,7 @@
 // set up basic SVG canvase use internet preffered margin set up (i follow the pack)
 var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 1000 - margin.left - margin.right,
-    height = 800 - margin.top - margin.bottom;
+    width = 1500 - margin.left - margin.right,
+    height = 1100 - margin.top - margin.bottom;
 
 
 var canvas = d3.select(".SCATTER").append("svg")
@@ -15,7 +15,7 @@ var Rmax = 620;
 var YTline = 30;
 // where hist goes
 var histOffset = 30;
-//global variables for us in funcitons
+//global variables for use in funcitons
 var ID;
 var ID2;
 var ymin;
@@ -163,28 +163,34 @@ function handleMouseOver(d) {
         .attr("ry", 15)
         .attr("id",ID + "TxtBub")
         .call(d3.drag()
-          //Click and drag function below
-          .on("drag", function () {
-            d3.select("#"+ID+"TxtBub")
-              .attr("x", d3.event.x)
-              .attr("y", d3.event.y);
-            d3.select("#TXT0")
-              .attr("x", d3.event.x + 2)
-              .attr("y", d3.event.y + Fsz);
-            d3.select("#TXT1")
-              .attr("x", d3.event.x + 2)
-              .attr("y", d3.event.y + (Fsz * 2.1));
-            d3.select("#TXT2")
-              .attr("x", d3.event.x + 2)
-              .attr("y", d3.event.y + (Fsz * 3.1));
-            d3.select("#TXT3")
-              .attr("x", d3.event.x + 2)
-              .attr("y", d3.event.y + (Fsz * 4.1));
-            d3.select("#TXT4")
-              .attr("x", d3.event.x + 2)
-              .attr("y", d3.event.y + (Fsz * 5.1));
-          })
-        );
+          .on("drag", DragIt));
+      //close button
+      canvas.append("rect")
+        .attr("x", X+15)
+        .attr("y", Y - 43)
+        .attr("width",50)
+        .attr("height",30)
+        .attr("fill", d3.rgb(247,24,24))
+        .attr("rx", 10)
+        .attr("ry",10)
+        .attr("fill-opacity", 0.60)
+        .attr("stroke", d3.rgb(247,24,24))
+        .attr("stroke-width", 2)
+        .attr("id", ID+"Close")
+        .on("click", CloseClick);
+
+      canvas.append("text")
+        .attr("x", X+25)
+        .attr("y", Y - 25)
+        .attr("font-family", "Calibri")
+        .attr("font-size", (Fsz-5)+"px")
+        .attr("fill", "white")
+        .attr("font-weight", 700)
+        .attr("id", ID+"cltxt")
+        .text("Close")
+        .on("click", CloseClick);
+
+
       // Text for text bubble
       // Stadium Name
       canvas.append("text")
@@ -193,6 +199,7 @@ function handleMouseOver(d) {
         .attr("font-family", "Calibri")
   			.attr("font-size", Fsz + "px")
   			.attr("fill", d3.rgb(21,21,240))
+        .attr("fill-opacity", 0.80)
   			.attr("font-weight", 700)
         .attr("id", ID+"TXT0")
         .text(d.Stadium);
@@ -204,6 +211,7 @@ function handleMouseOver(d) {
         .attr("font-size", (Fsz-2) + "px")
         .attr("fill", d3.rgb(21,21,240))
         .attr("font-weight", 400)
+        .attr("fill-opacity", 0.90)
         .attr("id", ID+"TXT1")
         .text("Year Built: " + d['Year.opened']);
       // 2018 cost to build
@@ -214,6 +222,7 @@ function handleMouseOver(d) {
         .attr("font-size", (Fsz-2) + "px")
         .attr("fill", d3.rgb(21,21,240))
         .attr("font-weight", 400)
+        .attr("fill-opacity", 0.90)
         .attr("id", ID+"TXT2")
         .text(costtxt);
       // Capacity
@@ -225,6 +234,7 @@ function handleMouseOver(d) {
         .attr("fill", d3.rgb(21,21,240))
         .attr("font-weight", 400)
         .attr("id", ID+"TXT3")
+        .attr("fill-opacity", 0.90)
         .text("Capacity: " + parseFloat(d.Capacity).toLocaleString('en'));
       // wikipedia link
       canvas.append("text")
@@ -234,10 +244,18 @@ function handleMouseOver(d) {
         .attr("font-size", (Fsz-2) + "px")
         .attr("fill", d3.rgb(21,21,240))
         .attr("font-weight", 400)
+        .attr("fill-opacity", 0.90)
         .attr("id", ID+"TXT4")
-        .attr("xlink:href", d.Link)
-        .text("Click for Wikipedia Page");
-    }; // end if statement for text bub creation
+        .text("Wikipedia Page")
+        .style("text-decoration", "underline")
+        .on("click", function() {window.open(d.Link)});
+    } else {
+      bub.attr("stroke-width", 3);
+    };
+
+
+    // end if statement for text bub creation
+    console.log(d.Link)
 
     // outline box
 		canvas.append("rect")
@@ -258,18 +276,24 @@ function handleMouseOut(d) {
 	d3.select("#sightline").remove();
 	d3.select("#"+ID).attr("fill", d3.rgb(93,161,216));
 	d3.select("#H" + d['Hist Bin']).attr("fill",d3.rgb(93,161,216));
+  d3.select("#" + ID + "TxtBub").attr("stroke-width", 0.5);
 };
 
 function histMouseOver(h) {
 	// get the max and min y posistions of the rectangle being hovered over
 	ymin = parseInt(d3.select(this).attr("y"));
 	ymax = parseInt(d3.select(this).attr("height")) + ymin;
+
+  //list all arenas highlighted by circle
+  var HistBin = h.Bin;
+
 	//Highlight all circles in region of rect
 	canvas.selectAll("circle").each(function(d) {
 			var CY = d3.select(this).attr("cy");
 
 			if (CY < ymax && CY >= ymin) {
-				d3.select(this).attr("fill", d3.rgb(244,161,66))
+				d3.select(this).attr("fill", d3.rgb(244,161,66));
+        console.log(d3.select(this).data().Stadium);
 			};
 
 	});
@@ -297,6 +321,7 @@ function histMouseOut(h) {
 
 			if (CY < ymax && CY >= ymin) {
 				d3.select(this).attr("fill", d3.rgb(93,161,216))
+
 			};
 	});
 	// un-highlight hist block
@@ -304,3 +329,53 @@ function histMouseOut(h) {
 
 	d3.select("#sightline").remove();
 };
+
+// function to drag text boxes
+function DragIt(d) {
+  IDD = d3.select(this).attr("id");
+  var H = parseInt(d3.select(this).attr("height"));
+  var baseID = IDD.substring(0, IDD.length-6);
+  var Fsz_sub = d3.select("#"+baseID+"TXT0").attr("font-size");
+  var Fsz = parseInt(Fsz_sub.substring(0, Fsz_sub.length - 2));
+  d3.select("#"+IDD)
+    .attr("x", d3.event.x)
+    .attr("y", d3.event.y);
+  d3.select("#"+baseID+"TXT0")
+    .attr("x", d3.event.x + 2)
+    .attr("y", d3.event.y + Fsz);
+  d3.select("#"+baseID+"TXT1")
+    .attr("x", d3.event.x + 2)
+    .attr("y", d3.event.y + (Fsz * 2.1));
+  d3.select("#"+baseID+"TXT2")
+    .attr("x", d3.event.x + 2)
+    .attr("y", d3.event.y + (Fsz * 3.1));
+  d3.select("#"+baseID+"TXT3")
+    .attr("x", d3.event.x + 2)
+    .attr("y", d3.event.y + (Fsz * 4.1));
+  d3.select("#"+baseID+"TXT4")
+    .attr("x", d3.event.x + 2)
+    .attr("y", d3.event.y + (Fsz * 5.1));
+  d3.select("#"+baseID+"cltxt")
+    .attr("x", d3.event.x + 18)
+    .attr("y", d3.event.y + H - 25);
+  d3.select("#"+baseID+"Close")
+    .attr("x", d3.event.x + 8)
+    .attr("y", d3.event.y + H - 43);
+
+
+}
+
+function CloseClick (c) {
+  IDC = d3.select(this).attr("id");
+  var baseID = IDC.substring(0,IDC.length-5);
+  d3.select("#"+baseID+"cltxt").attr("stroke-width", 5);
+  d3.select("#"+baseID+"Close").remove();
+  d3.select("#"+baseID+"cltxt").remove();
+  d3.select("#"+baseID+"TxtBub").remove();
+  d3.select("#"+baseID+"TXT0").remove();
+  d3.select("#"+baseID+"TXT1").remove();
+  d3.select("#"+baseID+"TXT2").remove();
+  d3.select("#"+baseID+"TXT3").remove();
+  d3.select("#"+baseID+"TXT4").remove();
+
+}
